@@ -1,0 +1,217 @@
+object TableNewForm: TTableNewForm
+  Left = 532
+  Height = 358
+  Top = 273
+  Width = 566
+  Caption = 'Neue Tabelle'
+  ClientHeight = 358
+  ClientWidth = 566
+  OnCreate = FormCreate
+  Position = poScreenCenter
+  LCLVersion = '2.0.8.0'
+  object TableNameEdit: TEdit
+    Left = 88
+    Height = 22
+    Top = 8
+    Width = 176
+    TabOrder = 0
+    Text = 'test.dbf'
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 16
+    Top = 8
+    Width = 39
+    Caption = '&Name:'
+    FocusControl = TableNameEdit
+    ParentColor = False
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Height = 224
+    Top = 40
+    Width = 568
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Caption = 'Felder'
+    ClientHeight = 205
+    ClientWidth = 558
+    TabOrder = 1
+    object Label2: TLabel
+      Left = 8
+      Height = 16
+      Top = 8
+      Width = 39
+      Caption = 'N&ame:'
+      ParentColor = False
+    end
+    object FieldNameEdit: TEdit
+      Left = 72
+      Height = 22
+      Top = 8
+      Width = 120
+      TabOrder = 0
+      Text = 'X'
+    end
+    object Label3: TLabel
+      Left = 224
+      Height = 16
+      Top = 8
+      Width = 26
+      Caption = '&Typ:'
+      ParentColor = False
+    end
+    object FieldTypeComboBox: TComboBox
+      Left = 272
+      Height = 20
+      Top = 8
+      Width = 128
+      ItemHeight = 19
+      ItemIndex = 6
+      Items.Strings = (
+        'ftUnknown'
+        'ftString'
+        'ftSmallint'
+        'ftInteger'
+        'ftWord'
+        'ftBoolean'
+        'ftFloat'
+        'ftCurrency'
+        'ftBCD'
+        'ftDate'
+        'ftTime'
+        'ftDateTime'
+        'ftBytes'
+        'ftVarBytes'
+        'ftAutoInc'
+        'ftBlob'
+        'ftMemo'
+        'ftGraphic'
+        'ftFmtMemo'
+        'ftParadoxOle'
+        'ftDBaseOle'
+        'ftTypedBinary'
+        'ftCursor'
+        'ftFixedCha'
+        'ftWideString'
+        'ftLargeint'
+        'ftADT'
+        'ftArray'
+        'ftReference'
+        'ftDataSet'
+        'ftOraBlob'
+        'ftOraClob'
+        'ftVariant'
+        'ftInterface'
+        'ftIDispatch'
+        'ftGuid'
+        'ftTimeStamp'
+        'ftFMTBcd'
+        'ftFixedWideChar'
+        'ftWideMemo'
+      )
+      TabOrder = 1
+      Text = 'ftFloat'
+    end
+    object Label4: TLabel
+      Left = 224
+      Height = 16
+      Top = 44
+      Width = 41
+      Caption = '&Länge:'
+      ParentColor = False
+    end
+    object FieldSizeEdit: TEdit
+      Left = 272
+      Height = 22
+      Top = 44
+      Width = 112
+      TabOrder = 2
+      Text = '0'
+    end
+    object Button1: TButton
+      Left = 416
+      Height = 25
+      Top = 41
+      Width = 91
+      Action = Form1.FieldNew
+      TabOrder = 3
+    end
+    object FieldListBox: TListBox
+      Left = 8
+      Height = 120
+      Top = 80
+      Width = 400
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      ItemHeight = 0
+      OnSelectionChange = FieldListBoxSelectionChange
+      TabOrder = 4
+    end
+    object Button2: TButton
+      Left = 416
+      Height = 25
+      Top = 84
+      Width = 75
+      Action = Form1.FieldDefUp
+      TabOrder = 5
+    end
+    object Button3: TButton
+      Left = 416
+      Height = 25
+      Top = 112
+      Width = 75
+      Action = Form1.FieldDefDown
+      TabOrder = 6
+    end
+    object Button4: TButton
+      Left = 416
+      Height = 25
+      Top = 144
+      Width = 75
+      Action = Form1.FieldDefRemove
+      TabOrder = 7
+    end
+  end
+  object Label5: TLabel
+    Left = 288
+    Height = 16
+    Top = 8
+    Width = 26
+    Caption = 'T&yp:'
+    ParentColor = False
+  end
+  object TableTypeComboBox: TComboBox
+    Left = 320
+    Height = 20
+    Top = 8
+    Width = 200
+    AutoDropDown = True
+    AutoSelect = False
+    ItemHeight = 19
+    TabOrder = 2
+  end
+  object BitBtn1: TBitBtn
+    Left = 24
+    Height = 30
+    Top = 302
+    Width = 88
+    Anchors = [akLeft, akBottom]
+    Caption = '&Erstellen'
+    Default = True
+    Kind = bkOK
+    ModalResult = 1
+    OnClick = BitBtn1Click
+    TabOrder = 3
+  end
+  object BitBtn2: TBitBtn
+    Left = 128
+    Height = 30
+    Top = 302
+    Width = 104
+    Anchors = [akLeft, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 4
+  end
+end

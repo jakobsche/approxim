@@ -1,0 +1,8 @@
+object TableDataInputForm: TTableDataInputForm
+  Left = 595
+  Height = 281
+  Top = 274
+  Width = 395
+  Caption = 'TableDataInputForm'
+  LCLVersion = '2.0.8.0'
+end

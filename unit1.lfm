@@ -1,0 +1,110 @@
+object Form1: TForm1
+  Left = 642
+  Height = 420
+  Top = 236
+  Width = 638
+  Caption = 'Form1'
+  ClientHeight = 420
+  ClientWidth = 638
+  Menu = MainMenu1
+  OnCreate = FormCreate
+  Position = poDefault
+  LCLVersion = '2.0.8.0'
+  object Chart1: TChart
+    Left = 0
+    Height = 420
+    Top = 0
+    Width = 638
+    AxisList = <    
+      item
+        Marks.LabelBrush.Style = bsClear
+        Minors = <>
+        Title.LabelFont.Orientation = 900
+        Title.LabelBrush.Style = bsClear
+      end    
+      item
+        Alignment = calBottom
+        Marks.LabelFont.Orientation = 900
+        Marks.LabelBrush.Style = bsClear
+        Minors = <>
+        Title.LabelBrush.Style = bsClear
+      end>
+    Foot.Brush.Color = clBtnFace
+    Foot.Font.Color = clBlue
+    Title.Brush.Color = clBtnFace
+    Title.Font.Color = clBlue
+    Title.Text.Strings = (
+      'TAChart'
+    )
+    Align = alClient
+    object Chart1LineSeries1: TLineSeries
+      Active = False
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LineType = ltNone
+      Pointer.Visible = True
+      ShowPoints = True
+      Source = DbChartSource1
+    end
+  end
+  object DbChartSource1: TDbChartSource
+    DataSource = DataSource1
+    FieldColor = 'Color'
+    FieldX = 'X'
+    FieldY = 'Y'
+    left = 80
+    top = 64
+  end
+  object DataSource1: TDataSource
+    AutoEdit = False
+    DataSet = Dbf1
+    left = 176
+    top = 64
+  end
+  object Dbf1: TDbf
+    Exclusive = True
+    IndexDefs = <>
+    OpenMode = omAutoCreate
+    TableLevel = 7
+    FilterOptions = []
+    left = 248
+    top = 64
+  end
+  object MainMenu1: TMainMenu
+    left = 48
+    top = 16
+    object MenuItem1: TMenuItem
+      Caption = '&Tabelle'
+      object MenuItem2: TMenuItem
+        Action = TableNew
+      end
+    end
+  end
+  object ActionList1: TActionList
+    left = 119
+    top = 16
+    object TableNew: TAction
+      Caption = '&Neu ...'
+      OnExecute = TableNewExecute
+    end
+    object FieldNew: TAction
+      Caption = '&Hinzufügen'
+      OnExecute = FieldNewExecute
+    end
+    object FieldDefUp: TAction
+      Caption = '&Auf'
+      Enabled = False
+      OnExecute = FieldDefUpExecute
+    end
+    object FieldDefDown: TAction
+      Caption = 'A&b'
+      Enabled = False
+      OnExecute = FieldDefDownExecute
+    end
+    object FieldDefRemove: TAction
+      Caption = '&Löschen'
+      Enabled = False
+      OnExecute = FieldDefRemoveExecute
+    end
+  end
+end
