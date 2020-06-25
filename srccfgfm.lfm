@@ -1,0 +1,99 @@
+object ChartSourceEditForm: TChartSourceEditForm
+  Left = 617
+  Height = 181
+  Top = 244
+  Width = 260
+  BorderStyle = bsDialog
+  Caption = 'ChartSourceEditForm'
+  ClientHeight = 181
+  ClientWidth = 260
+  OnCreate = FormCreate
+  Position = poDefaultPosOnly
+  LCLVersion = '2.0.8.0'
+  object Label1: TLabel
+    Left = 8
+    Height = 16
+    Top = 10
+    Width = 44
+    Caption = '&X-Feld:'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 10
+    Height = 16
+    Top = 36
+    Width = 43
+    Caption = '&Y-Feld:'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 8
+    Height = 16
+    Top = 62
+    Width = 53
+    Caption = '&Farbfeld:'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 9
+    Height = 16
+    Top = 88
+    Width = 52
+    Caption = '&Textfeld:'
+    ParentColor = False
+  end
+  object XFieldComboBox: TComboBox
+    Left = 80
+    Height = 20
+    Top = 10
+    Width = 100
+    ItemHeight = 19
+    TabOrder = 0
+  end
+  object YFieldComboBox: TComboBox
+    Left = 80
+    Height = 20
+    Top = 36
+    Width = 100
+    ItemHeight = 19
+    TabOrder = 1
+  end
+  object ColorFieldComboBox: TComboBox
+    Left = 80
+    Height = 20
+    Top = 62
+    Width = 100
+    ItemHeight = 19
+    TabOrder = 2
+  end
+  object TextFieldComboBox: TComboBox
+    Left = 80
+    Height = 20
+    Top = 88
+    Width = 100
+    ItemHeight = 19
+    TabOrder = 3
+  end
+  object BitBtn1: TBitBtn
+    Left = 10
+    Height = 30
+    Top = 120
+    Width = 75
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 4
+  end
+  object BitBtn2: TBitBtn
+    Left = 96
+    Height = 30
+    Top = 120
+    Width = 104
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 5
+  end
+end

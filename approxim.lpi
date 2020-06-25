@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="5">
       <Unit0>
         <Filename Value="approxim.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -71,6 +71,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="DataInFm"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="srccfgfm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ChartSourceEditForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="SrcCfgFm"/>
+      </Unit4>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

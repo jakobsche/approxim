@@ -45,7 +45,7 @@ var
 
 implementation
 
-uses Patch, TblNewFm, DataInFm;
+uses Patch, TblNewFm, DataInFm, dbf_common, TACustomSource, SrcCfgFm;
 
 {$R *.lfm}
 
@@ -55,11 +55,11 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
   Dbf1.FilePath := BuildFileName(GetAppConfigDir(False), 'data');
   if ForceDirectories(Dbf1.FilePath) then begin
-    Dbf1.TableName := 'test.dbf';
+    {Dbf1.TableName := 'test.dbf';
     with Dbf1.FieldDefs do begin
       Add('X', ftFloat);
       Add('Y', ftFloat);
-      Add('Color', ftInteger);
+      {Add('Color', ftInteger);}
     end;
     Dbf1.CreateTable;
     Dbf1.Open;
@@ -70,7 +70,7 @@ begin
     Dbf1.AppendRecord([Now, 0, clRed]);
     Dbf1.AppendRecord([Now + 1/24, 1, clRed]);
     {Dbf1.Close;}
-    Chart1LineSeries1.Active := True;
+    Chart1LineSeries1.Active := True;}
   end
 end;
 
@@ -118,16 +118,61 @@ begin
 end;
 
 procedure TForm1.TableNewExecute(Sender: TObject);
+var
+  NoError: Boolean;
+  i, MaxIndex: Integer;
 begin
-  if TableNewForm.ShowModal = mrOK then begin
-    Dbf1.Close;
-    {Dbf1.Assign(TableNewForm.DataSet); TDbf.AssignTo müßte überschrieben werden
-    oder Felder einzeln zuweisen}
-    Dbf1.FilePathFull:= TableNewForm.DataSet.FilePathFull;
-    Dbf1.FieldDefs := TableNewForm.DataSet.FieldDefs;
-    Dbf1.CreateTable;
-    TableDataInputForm.ShowModal
-  end;
+  NoError := False;
+  repeat
+    try
+      if TableNewForm.ShowModal = mrOK then begin
+        Dbf1.Close;
+        Dbf1.FilePath := TableNewForm.DataSet.FilePath;
+        Dbf1.TableName := TableNewForm.DataSet.TableName;
+        Dbf1.FieldDefs := TableNewForm.DataSet.FieldDefs;
+        Dbf1.CreateTable;
+        repeat
+          try
+            Dbf1.Open;
+            TableDataInputForm.ShowModal;
+            Dbf1.Close;
+            with ChartSourceEditForm do begin
+              MaxIndex := Dbf1.FieldDefs.Count - 1;
+              for i := 0 to MaxIndex do
+                XFieldComboBox.Items.Add(Dbf1.FieldDefs[i].Name);
+              YFieldComboBox.Items := XFieldComboBox.Items;
+              ColorFieldComboBox.Items := XFieldComboBox.Items;
+              TextFieldComboBox.Items := XFieldComboBox.Items;
+            end;
+            if ChartSourceEditForm.ShowModal = mrOK then begin
+              DBChartSource1.FieldX := ChartSourceEditForm.FieldX;
+              DBChartSource1.FieldY := ChartSourceEditForm.FieldY;
+              DBChartSource1.FieldColor := ChartSourceEditForm.FieldColor;
+              DBChartSource1.FieldText := ChartSourceEditForm.FieldText;
+              Dbf1.IndexDefs.Clear;
+              Dbf1.Open;
+              Dbf1.AddIndex('X', DBChartSource1.FieldX, []);
+              Dbf1.IndexName := 'X';
+              Chart1LineSeries1.Source := DBChartSource1;
+            end;
+            NoError := True;
+          except
+            on E: EYCountError do begin
+              ShowMessage(E.Message);
+            end;
+          end;
+        until NoError;
+      end;
+    except
+      on E: EDbfError do begin
+        ShowMessage(E.Message);
+        NoError := False
+      end;
+      else begin
+        raise;
+      end;
+    end
+  until NoError;
 end;
 
 end.
