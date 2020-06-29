@@ -1,9 +1,9 @@
 object Form1: TForm1
-  Left = 642
+  Left = 449
   Height = 420
-  Top = 236
+  Top = 232
   Width = 638
-  Caption = 'Form1'
+  Caption = 'Approximator'
   ClientHeight = 420
   ClientWidth = 638
   Menu = MainMenu1
@@ -20,6 +20,7 @@ object Form1: TForm1
         Marks.LabelBrush.Style = bsClear
         Minors = <>
         Title.LabelFont.Orientation = 900
+        Title.Visible = True
         Title.LabelBrush.Style = bsClear
       end    
       item
@@ -27,6 +28,7 @@ object Form1: TForm1
         Marks.LabelFont.Orientation = 900
         Marks.LabelBrush.Style = bsClear
         Minors = <>
+        Title.Visible = True
         Title.LabelBrush.Style = bsClear
       end>
     Foot.Brush.Color = clBtnFace
@@ -36,12 +38,19 @@ object Form1: TForm1
     Title.Text.Strings = (
       'TAChart'
     )
+    Title.Visible = True
     Align = alClient
     object Chart1LineSeries1: TLineSeries
       AxisIndexX = 1
       AxisIndexY = 0
+      LineType = ltNone
+      Pointer.Brush.Color = clRed
       Pointer.Visible = True
       ShowPoints = True
+    end
+    object Chart1FuncSeries1: TFuncSeries
+      AxisIndexX = 1
+      AxisIndexY = 0
     end
   end
   object DbChartSource1: TDbChartSource
@@ -75,6 +84,27 @@ object Form1: TForm1
       object MenuItem2: TMenuItem
         Action = TableNew
       end
+      object MenuItem4: TMenuItem
+        Action = TableOpen
+      end
+      object MenuItem5: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem3: TMenuItem
+        Action = TableEdit
+      end
+    end
+    object MenuItem6: TMenuItem
+      Caption = 'Diagramm'
+      object MenuItem7: TMenuItem
+        Action = ChartCopy
+      end
+    end
+    object MenuItem8: TMenuItem
+      Caption = '&Approximation'
+      object ApproximationPolynomialItem: TMenuItem
+        Action = ApproximationPolynomial
+      end
     end
   end
   object ActionList1: TActionList
@@ -103,5 +133,29 @@ object Form1: TForm1
       Enabled = False
       OnExecute = FieldDefRemoveExecute
     end
+    object TableEdit: TAction
+      Caption = '&Bearbeiten ...'
+      Enabled = False
+      OnExecute = TableEditExecute
+    end
+    object TableOpen: TAction
+      Caption = 'Ö&ffnen ...'
+      OnExecute = TableOpenExecute
+    end
+    object ChartCopy: TAction
+      Caption = 'Grafik &kopieren'
+      OnExecute = ChartCopyExecute
+    end
+    object ApproximationPolynomial: TAction
+      Caption = '&Polynom ...'
+      OnExecute = ApproximationPolynomialExecute
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    DefaultExt = '.dbf'
+    Filter = 'dBase|*.dbf|Alle|*'
+    Options = [ofPathMustExist, ofFileMustExist, ofNoResolveLinks, ofEnableSizing, ofViewDetail, ofAutoPreview]
+    left = 200
+    top = 16
   end
 end

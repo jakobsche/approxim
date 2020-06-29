@@ -6,38 +6,55 @@ interface
 
 uses
   SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ActnList, db,
-  dbf, TAGraph,
-  TADbSource, TASeries;
+  dbf, SdfData, Regressi, TAGraph,
+  TADbSource, TASeries, Classes, TACustomSource, TAFuncSeries;
 
 type
 
   { TForm1 }
 
   TForm1 = class(TForm)
+    ApproximationPolynomial: TAction;
+    Chart1: TChart;
+    Chart1FuncSeries1: TFuncSeries;
+    Chart1LineSeries1: TLineSeries;
+    ChartCopy: TAction;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
+    ApproximationPolynomialItem: TMenuItem;
+    OpenDialog1: TOpenDialog;
+    TableOpen: TAction;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    TableEdit: TAction;
     FieldDefRemove: TAction;
     FieldDefDown: TAction;
     FieldDefUp: TAction;
     FieldNew: TAction;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
     TableNew: TAction;
     ActionList1: TActionList;
-    Chart1: TChart;
-    Chart1LineSeries1: TLineSeries;
     DataSource1: TDataSource;
     DbChartSource1: TDbChartSource;
     Dbf1: TDbf;
     MainMenu1: TMainMenu;
+    procedure ApproximationPolynomialExecute(Sender: TObject);
+    procedure ChartCopyExecute(Sender: TObject);
     procedure FieldDefDownExecute(Sender: TObject);
     procedure FieldDefRemoveExecute(Sender: TObject);
     procedure FieldDefUpExecute(Sender: TObject);
     procedure FieldNewExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure TableEditExecute(Sender: TObject);
     procedure TableNewExecute(Sender: TObject);
+    procedure TableOpenExecute(Sender: TObject);
   private
 
   public
-
+    PA: TPolynomialApproximator;
   end;
 
 var
@@ -45,7 +62,7 @@ var
 
 implementation
 
-uses Patch, TblNewFm, DataInFm, dbf_common, TACustomSource, SrcCfgFm;
+uses CoEdFm, Patch, TblNewFm, DataInFm, dbf_common, SrcCfgFm;
 
 {$R *.lfm}
 
@@ -54,24 +71,16 @@ uses Patch, TblNewFm, DataInFm, dbf_common, TACustomSource, SrcCfgFm;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   Dbf1.FilePath := BuildFileName(GetAppConfigDir(False), 'data');
+  OpenDialog1.InitialDir := Dbf1.FilePath;
   if ForceDirectories(Dbf1.FilePath) then begin
-    {Dbf1.TableName := 'test.dbf';
-    with Dbf1.FieldDefs do begin
-      Add('X', ftFloat);
-      Add('Y', ftFloat);
-      {Add('Color', ftInteger);}
-    end;
-    Dbf1.CreateTable;
-    Dbf1.Open;
-    with Dbf1 do begin
-      AddIndex('chartx', 'X', [ixPrimary, ixUnique]);
 
-    end;
-    Dbf1.AppendRecord([Now, 0, clRed]);
-    Dbf1.AppendRecord([Now + 1/24, 1, clRed]);
-    {Dbf1.Close;}
-    Chart1LineSeries1.Active := True;}
-  end
+  end;
+  PA := TPolynomialApproximator.Create(Self);
+end;
+
+procedure TForm1.TableEditExecute(Sender: TObject);
+begin
+  TableDataInputForm.ShowModal
 end;
 
 procedure TForm1.FieldNewExecute(Sender: TObject);
@@ -110,6 +119,28 @@ begin
   end;
 end;
 
+procedure TForm1.ChartCopyExecute(Sender: TObject);
+begin
+  Chart1.CopyToClipboardBitmap;
+end;
+
+procedure TForm1.ApproximationPolynomialExecute(Sender: TObject);
+var
+  i: Integer;
+begin
+  PA.Degree := StrToInt(InputBox('Grad des Polynoms', 'Grad: ', '0'));
+  CoefficientEditForm.Degree := PA.Degree;
+  if CoefficientEditForm.ShowModal = mrOK then
+    with PA do begin
+      for i := 0 to CoefficientCount - 1 do
+        with CoefficientRecords[i] do begin
+          StartMin := StrToFloat(CoefficientEditForm.StringGrid1.Cells[1, i + 1]);
+          StartMax := StrToFloat(CoefficientEditForm.StringGrid1.Cells[2, i + 1])
+        end;
+      Calculate
+    end;
+end;
+
 procedure TForm1.FieldDefRemoveExecute(Sender: TObject);
 begin
   with TableNewForm.FieldListBox do begin
@@ -125,8 +156,10 @@ begin
   NoError := False;
   repeat
     try
+      DBChartSource1.BeginUpdate;
       if TableNewForm.ShowModal = mrOK then begin
         Dbf1.Close;
+        if Dbf1.FieldCount > 0 then Dbf1.ClearFields;
         Dbf1.FilePath := TableNewForm.DataSet.FilePath;
         Dbf1.TableName := TableNewForm.DataSet.TableName;
         Dbf1.FieldDefs := TableNewForm.DataSet.FieldDefs;
@@ -136,8 +169,10 @@ begin
             Dbf1.Open;
             TableDataInputForm.ShowModal;
             Dbf1.Close;
+            TableEdit.Enabled := True;
             with ChartSourceEditForm do begin
               MaxIndex := Dbf1.FieldDefs.Count - 1;
+              XFieldComboBox.Items.Clear;
               for i := 0 to MaxIndex do
                 XFieldComboBox.Items.Add(Dbf1.FieldDefs[i].Name);
               YFieldComboBox.Items := XFieldComboBox.Items;
@@ -146,14 +181,18 @@ begin
             end;
             if ChartSourceEditForm.ShowModal = mrOK then begin
               DBChartSource1.FieldX := ChartSourceEditForm.FieldX;
+              Chart1.BottomAxis.Title.Caption:= ChartSourceEditForm.FieldX;
               DBChartSource1.FieldY := ChartSourceEditForm.FieldY;
+              Chart1.LeftAxis.Title.Caption := ChartSourceEditForm.FieldY;
               DBChartSource1.FieldColor := ChartSourceEditForm.FieldColor;
               DBChartSource1.FieldText := ChartSourceEditForm.FieldText;
+              Dbf1.Close;
               Dbf1.IndexDefs.Clear;
               Dbf1.Open;
               Dbf1.AddIndex('X', DBChartSource1.FieldX, []);
               Dbf1.IndexName := 'X';
               Chart1LineSeries1.Source := DBChartSource1;
+              Chart1.Title.Text.Text := Dbf1.TableName;
             end;
             NoError := True;
           except
@@ -163,6 +202,7 @@ begin
           end;
         until NoError;
       end;
+      DBChartSource1.EndUpdate;
     except
       on E: EDbfError do begin
         ShowMessage(E.Message);
@@ -173,6 +213,44 @@ begin
       end;
     end
   until NoError;
+end;
+
+procedure TForm1.TableOpenExecute(Sender: TObject);
+var
+  i, MaxIndex: Integer;
+begin
+  DBChartSource1.BeginUpdate;
+  if OpenDialog1.Execute then begin
+    Dbf1.Close;
+    Dbf1.FilePath := ExtractFilePath(OpenDialog1.FileName);
+    Dbf1.TableName := ExtractFileName(OpenDialog1.FileName);
+    Dbf1.Open;
+    with ChartSourceEditForm do begin
+      MaxIndex := Dbf1.FieldDefs.Count - 1;
+      XFieldComboBox.Items.Clear;
+      for i := 0 to MaxIndex do
+        XFieldComboBox.Items.Add(Dbf1.FieldDefs[i].Name);
+      YFieldComboBox.Items := XFieldComboBox.Items;
+      ColorFieldComboBox.Items := XFieldComboBox.Items;
+      TextFieldComboBox.Items := XFieldComboBox.Items;
+    end;
+    if ChartSourceEditForm.ShowModal = mrOK then begin
+      DBChartSource1.FieldX := ChartSourceEditForm.FieldX;
+      Chart1.BottomAxis.Title.Caption := ChartSourceEditForm.FieldX;
+      DBChartSource1.FieldY := ChartSourceEditForm.FieldY;
+      Chart1.LeftAxis.Title.Caption:= ChartSourceEditForm.FieldY;
+      DBChartSource1.FieldColor := ChartSourceEditForm.FieldColor;
+      DBChartSource1.FieldText := ChartSourceEditForm.FieldText;
+      Dbf1.IndexDefs.Clear;
+      Dbf1.Open;
+      Dbf1.AddIndex('X', DBChartSource1.FieldX, []);
+      Dbf1.IndexName := 'X';
+      Chart1LineSeries1.Source := DbChartSource1;
+      Chart1.Title.Text.Text := Dbf1.TableName;
+      TableEdit.Enabled := True;
+    end;
+  end;
+  DBChartSource1.EndUpdate;
 end;
 
 end.

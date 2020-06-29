@@ -1,12 +1,12 @@
 object ChartSourceEditForm: TChartSourceEditForm
   Left = 617
-  Height = 181
+  Height = 169
   Top = 244
-  Width = 260
+  Width = 327
   BorderStyle = bsDialog
   Caption = 'ChartSourceEditForm'
-  ClientHeight = 181
-  ClientWidth = 260
+  ClientHeight = 169
+  ClientWidth = 327
   OnCreate = FormCreate
   Position = poDefaultPosOnly
   LCLVersion = '2.0.8.0'

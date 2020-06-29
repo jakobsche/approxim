@@ -46,6 +46,7 @@ type
     TableNameEdit: TEdit;
     Label1: TLabel;
     procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
     procedure FieldListBoxSelectionChange(Sender: TObject; User: boolean);
     procedure FormCreate(Sender: TObject);
   private
@@ -129,6 +130,11 @@ begin
     FD := FieldListBox.Items.Objects[i] as TFieldDescription;
     DataSet.FieldDefs.Add(FD.FieldName, FD.FieldType, FD.FieldSize);
   end;
+end;
+
+procedure TTableNewForm.BitBtn2Click(Sender: TObject);
+begin
+
 end;
 
 end.

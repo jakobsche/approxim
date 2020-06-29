@@ -1,7 +1,7 @@
 object TableDataInputForm: TTableDataInputForm
-  Left = 595
+  Left = 399
   Height = 332
-  Top = 274
+  Top = 284
   Width = 463
   Caption = 'TableDataInputForm'
   ClientHeight = 332
@@ -23,6 +23,8 @@ object TableDataInputForm: TTableDataInputForm
     ClientWidth = 241
     DataSource = Form1.DataSource1
     Options = []
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 0
   end
   object DBGrid1: TDBGrid

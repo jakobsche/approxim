@@ -5,7 +5,7 @@
     <General>
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
-      <Title Value="approxim"/>
+      <Title Value="Approximator"/>
       <Scaled Value="True"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
@@ -25,24 +25,30 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <RequiredPackages Count="5">
+    <RequiredPackages Count="7">
       <Item1>
-        <PackageName Value="rtlpatch"/>
+        <PackageName Value="realfunc"/>
       </Item1>
       <Item2>
-        <PackageName Value="DBFLaz"/>
+        <PackageName Value="SDFLaz"/>
       </Item2>
       <Item3>
-        <PackageName Value="FCL"/>
+        <PackageName Value="rtlpatch"/>
       </Item3>
       <Item4>
-        <PackageName Value="TAChartLazarusPkg"/>
+        <PackageName Value="DBFLaz"/>
       </Item4>
       <Item5>
-        <PackageName Value="LCL"/>
+        <PackageName Value="FCL"/>
       </Item5>
+      <Item6>
+        <PackageName Value="TAChartLazarusPkg"/>
+      </Item6>
+      <Item7>
+        <PackageName Value="LCL"/>
+      </Item7>
     </RequiredPackages>
-    <Units Count="5">
+    <Units Count="7">
       <Unit0>
         <Filename Value="approxim.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -75,9 +81,22 @@
         <Filename Value="srccfgfm.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ChartSourceEditForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="SrcCfgFm"/>
       </Unit4>
+      <Unit5>
+        <Filename Value="regressi.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Regressi"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="coedfm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CoefficientEditForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="CoEdFm"/>
+      </Unit6>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
